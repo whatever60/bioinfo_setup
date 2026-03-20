@@ -176,7 +176,11 @@ apply_home_manager() {
     exit 1
   fi
 
-  nix_bin="$(command -v nix)"
+  if [ -x /nix/var/nix/profiles/default/bin/nix ]; then
+    nix_bin="/nix/var/nix/profiles/default/bin/nix"
+  else
+    nix_bin="$(command -v nix)"
+  fi
   system_name="$("$nix_bin" eval --impure --raw --expr builtins.currentSystem)"
   flake_target="${REPO_REF}#portable-${system_name}"
   host_family="${HOST_FAMILY:-$(detect_host_family)}"
