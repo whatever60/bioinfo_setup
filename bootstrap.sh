@@ -208,6 +208,7 @@ main() {
   # ----------------------------------------------------------------------------
   # Top-level orchestration.
   # ----------------------------------------------------------------------------
+  export NIX_CONFIG="${NIX_CONFIG:-experimental-features = nix-command flakes}"
   ensure_nix
   load_nix
   apply_home_manager
