@@ -58,16 +58,16 @@ ensure_nix() {
   fi
 
   if [ -z "${HOME:-}" ]; then
-    export HOME
     HOME="$(home_for_user "$(id -un)")"
+    export HOME
   fi
 
   echo "Nix not found; installing it..." >&2
 
   if [ "$(id -u)" -eq 0 ]; then
-    download "https://nixos.org/nix/install" | sh -s -- --daemon
+    download "https://nixos.org/nix/install" | HOME="$HOME" sh -s -- --daemon
   elif command -v sudo >/dev/null 2>&1; then
-    download "https://nixos.org/nix/install" | sudo sh -s -- --daemon
+    download "https://nixos.org/nix/install" | sudo HOME="$HOME" sh -s -- --daemon
   else
     echo "Nix is missing and sudo is unavailable. Install Nix first." >&2
     exit 1
