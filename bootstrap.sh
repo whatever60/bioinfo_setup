@@ -196,7 +196,7 @@ apply_home_manager() {
         HOST_FAMILY='${host_family}' \
         NIX_CONFIG='experimental-features = nix-command flakes' \
         '${nix_bin}' run github:nix-community/home-manager/release-25.05 -- \
-          switch --impure --no-write-lock-file --flake '${flake_target}'
+          switch -b backup --impure --no-write-lock-file --flake '${flake_target}'
     "
   else
     USER="$TARGET_USER" \
@@ -204,7 +204,7 @@ apply_home_manager() {
     HOST_FAMILY="$host_family" \
     NIX_CONFIG='experimental-features = nix-command flakes' \
     "$nix_bin" run github:nix-community/home-manager/release-25.05 -- \
-      switch --impure --no-write-lock-file --flake "$flake_target"
+      switch -b backup --impure --no-write-lock-file --flake "$flake_target"
   fi
 }
 
