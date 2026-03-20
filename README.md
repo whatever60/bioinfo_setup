@@ -37,7 +37,7 @@ From Miniforge `base` environment (`mamba install`):
 
 ## Linux EC2 Test (Ubuntu + Debian)
 
-Use the smallest practical instance that can still solve/install the conda stack. `t3.small` is a good starting point.
+Use a small-but-sufficient instance for the full package set (including heavy R packages): `t3.medium` with a 32 GiB root volume.
 
 1. Prepare environment variables:
 
@@ -67,19 +67,21 @@ DEBIAN_AMI=$(aws ec2 describe-images \
 ```bash
 aws ec2 run-instances \
   --image-id "$UBUNTU_AMI" \
-  --instance-type t3.small \
+  --instance-type t3.medium \
   --key-name "$KEY_NAME" \
   --security-group-ids <sg_id> \
   --subnet-id <subnet_id> \
+  --block-device-mappings '[{"DeviceName":"/dev/sda1","Ebs":{"VolumeSize":32,"VolumeType":"gp3","DeleteOnTermination":true}}]' \
   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=bioinfo-ubuntu-test}]' \
   --user-data file://ec2_linux_user_data.sh
 
 aws ec2 run-instances \
   --image-id "$DEBIAN_AMI" \
-  --instance-type t3.small \
+  --instance-type t3.medium \
   --key-name "$KEY_NAME" \
   --security-group-ids <sg_id> \
   --subnet-id <subnet_id> \
+  --block-device-mappings '[{"DeviceName":"/dev/xvda","Ebs":{"VolumeSize":32,"VolumeType":"gp3","DeleteOnTermination":true}}]' \
   --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=bioinfo-debian-test}]' \
   --user-data file://ec2_linux_user_data.sh
 ```
@@ -103,3 +105,4 @@ $HOME/miniforge3/bin/mamba list | head
 
 - Repo defaults are wired to `github:whatever60/bioinfo_setup` and `main` branch raw bootstrap URL.
 - For testing another branch/repo, override `REPO_REF` and `BOOTSTRAP_URL` in user data.
+- `nala` is best-effort optional from Nix (`pkgs.nala`) and may be absent depending on nixpkgs availability.
