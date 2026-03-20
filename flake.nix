@@ -112,11 +112,13 @@
           # because that is what you asked for. It is convenient, but it is also
           # fairly heavy. Later, you may want to split this into named envs.
           # -------------------------------------------------------------------
-          condaBasePackages = [
+          # Install in chunks to avoid OOM on small instances.
+          condaCorePackages = [
             "python=3.12"
             "pip"
+          ];
 
-            # Python scientific stack
+          condaSciencePackages = [
             "numpy"
             "pandas"
             "scipy"
@@ -125,18 +127,21 @@
             "seaborn"
             "statsmodels"
             "sympy"
+          ];
 
-            # Interactive / notebook tooling
+          condaNotebookPackages = [
             "ipython"
             "ipywidgets"
             "ipykernel"
             "jupyterlab"
             "notebook"
+          ];
 
-            # ML
+          condaMlPackages = [
             "pytorch"
+          ];
 
-            # R 4.5 + a practical starter set
+          condaRPackages = [
             "r-base=4.5.*"
             "r-essentials"
             "r-tidyverse"
@@ -144,7 +149,11 @@
             "r-irkernel"
           ];
 
-          condaBaseArgs = lib.escapeShellArgs condaBasePackages;
+          condaCoreArgs = lib.escapeShellArgs condaCorePackages;
+          condaScienceArgs = lib.escapeShellArgs condaSciencePackages;
+          condaNotebookArgs = lib.escapeShellArgs condaNotebookPackages;
+          condaMlArgs = lib.escapeShellArgs condaMlPackages;
+          condaRArgs = lib.escapeShellArgs condaRPackages;
 
           # -------------------------------------------------------------------
           # Portable substitute for "make fish my default shell".
@@ -328,7 +337,11 @@
                   "$miniforge_root/bin/conda" config --set channel_priority strict
 
                   # Install or update the requested scientific stack in base.
-                  "$miniforge_root/bin/mamba" install -y -n base ${condaBaseArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaCoreArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaScienceArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaNotebookArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaMlArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaRArgs}
                 '';
             })
           ];
