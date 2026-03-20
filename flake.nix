@@ -141,19 +141,27 @@
             "pytorch"
           ];
 
-          condaRPackages = [
+          condaRCorePackages = [
             "r-base=4.5.*"
-            "r-essentials"
-            "r-tidyverse"
             "r-data.table"
             "r-irkernel"
+          ];
+
+          condaREssentialsPackages = [
+            "r-essentials"
+          ];
+
+          condaRTidyversePackages = [
+            "r-tidyverse"
           ];
 
           condaCoreArgs = lib.escapeShellArgs condaCorePackages;
           condaScienceArgs = lib.escapeShellArgs condaSciencePackages;
           condaNotebookArgs = lib.escapeShellArgs condaNotebookPackages;
           condaMlArgs = lib.escapeShellArgs condaMlPackages;
-          condaRArgs = lib.escapeShellArgs condaRPackages;
+          condaRCoreArgs = lib.escapeShellArgs condaRCorePackages;
+          condaREssentialsArgs = lib.escapeShellArgs condaREssentialsPackages;
+          condaRTidyverseArgs = lib.escapeShellArgs condaRTidyversePackages;
 
           # -------------------------------------------------------------------
           # Portable substitute for "make fish my default shell".
@@ -341,7 +349,9 @@
                   "$miniforge_root/bin/mamba" install -y -n base ${condaScienceArgs}
                   "$miniforge_root/bin/mamba" install -y -n base ${condaNotebookArgs}
                   "$miniforge_root/bin/mamba" install -y -n base ${condaMlArgs}
-                  "$miniforge_root/bin/mamba" install -y -n base ${condaRArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaRCoreArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaREssentialsArgs}
+                  "$miniforge_root/bin/mamba" install -y -n base ${condaRTidyverseArgs}
                 '';
             })
           ];
