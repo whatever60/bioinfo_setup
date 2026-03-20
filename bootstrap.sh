@@ -57,6 +57,11 @@ ensure_nix() {
     return
   fi
 
+  if [ -z "${HOME:-}" ]; then
+    export HOME
+    HOME="$(home_for_user "$(id -un)")"
+  fi
+
   echo "Nix not found; installing it..." >&2
 
   if [ "$(id -u)" -eq 0 ]; then
