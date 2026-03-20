@@ -300,6 +300,8 @@
                     pkgs.coreutils
                     pkgs.curl
                     pkgs.findutils
+                    pkgs.gawk
+                    pkgs.glibc.bin
                     pkgs.gnugrep
                     pkgs.gnused
                     pkgs.gzip
